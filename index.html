@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wear Memory Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header>
+        <h1>wear <span>Memory Game</span></h1>
+        <p class="lead">Match each English card with its Korean answer. You will hear the Korean when you get it right.</p>
+      </header>
+
+      <div class="tabs" id="tabs" role="group" aria-label="Choose a level"></div>
+
+      <section class="game">
+        <p class="level-sub" id="levelSub"></p>
+
+        <div class="stats">
+          <div class="stat"><span class="stat-label">Moves</span><span class="stat-value" id="moves">0</span></div>
+          <div class="stat"><span class="stat-label">Time</span><span class="stat-value" id="time">0:00</span></div>
+          <div class="stat"><span class="stat-label">Pairs found</span><span class="stat-value" id="pairs">0 / 0</span></div>
+        </div>
+
+        <div class="grid" id="grid"></div>
+
+        <div class="tools">
+          <button type="button" class="btn small" id="restart">🔀 Restart</button>
+          <button type="button" class="btn small" id="sound" aria-pressed="true">🔊 Sound on</button>
+        </div>
+        <p class="tip">Tap an English card and a Korean card to check the pair.</p>
+      </section>
+    </main>
+
+    <div class="sr-only" id="announce" aria-live="polite"></div>
+
+    <div class="overlay" id="overlay" hidden>
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="doneTitle">
+        <h2 id="doneTitle">🎉 All pairs found!</h2>
+        <p class="done-sub" id="doneSub"></p>
+        <div class="done-stats">
+          <div class="stat"><span class="stat-label">Moves</span><span class="stat-value" id="doneMoves">0</span></div>
+          <div class="stat"><span class="stat-label">Time</span><span class="stat-value" id="doneTime">0:00</span></div>
+        </div>
+        <div class="done-actions">
+          <button type="button" class="btn" id="playAgain">Play again</button>
+          <button type="button" class="btn primary" id="nextLevel">Next level</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

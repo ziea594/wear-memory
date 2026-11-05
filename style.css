@@ -1,0 +1,359 @@
+:root {
+  /* wear-cards 와 같은 색 */
+  --bg: #f3f4f8;
+  --ink: #1f2a5a;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --line: #d9deee;
+  --accent: #4f46e5;
+  --accent-soft: #eef0ff;
+  --back: #fff7e6;
+  --back-line: #f2c46b;
+  /* 짝 맞추기 게임에서 더한 색 */
+  --ok: #2f9e66;
+  --ok-soft: #e4f7ec;
+  --bad: #e0566b;
+  --card-h: 116px;
+  --gap: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 16px 48px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+h1 span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.lead {
+  margin: 6px 0 20px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 레벨 탭 */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.tab {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.tab small {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.tab[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.level-sub {
+  margin: 0 0 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* 상태 줄 */
+.stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.stat {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  text-align: center;
+}
+.stat-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.stat-value {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 카드 격자: 폰 2열 → 3열 → 4열 → 5열 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  height: var(--card-h);
+  padding: 8px 8px 10px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(31, 42, 90, 0.08);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.card:focus-visible,
+.btn:focus-visible,
+.tab:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 모든 카드가 처음부터 앞면: 영어는 보라 계열, 한국어는 wear-cards 의 정답 카드 색 */
+.card.en {
+  background: var(--accent-soft);
+  border-color: #b9bdf5;
+}
+.card.ko {
+  background: var(--back);
+  border-color: #f2dba8;
+}
+.card.idle:hover {
+  transform: translateY(-2px);
+}
+
+/* 지금 고른 카드: 진한 테두리 + 바깥 링 */
+.card.open {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent), 0 6px 18px rgba(31, 42, 90, 0.15);
+  transform: translateY(-2px);
+}
+.card.open.ko {
+  border-color: var(--back-line);
+  box-shadow: 0 0 0 3px var(--back-line), 0 6px 18px rgba(31, 42, 90, 0.15);
+}
+
+/* 맞힌 카드: 초록 */
+.card.matched {
+  background: var(--ok-soft);
+  border-color: var(--ok);
+  cursor: default;
+  animation: pop 0.35s ease;
+}
+/* 틀렸을 때: 빨간 링 + 흔들림 */
+.card.wrong,
+.card.open.wrong,
+.card.open.ko.wrong {
+  border-color: var(--bad);
+  box-shadow: 0 0 0 3px var(--bad), 0 6px 18px rgba(31, 42, 90, 0.15);
+  animation: shake 0.35s ease;
+}
+
+.side {
+  flex: none;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.card.matched .side {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+/* 글자가 카드 안에 다 들어가도록 app.js 가 font-size 를 줄인다 */
+.text-wrap {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.text {
+  display: block;
+  width: 100%;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.tip {
+  margin: 14px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* 버튼 */
+.btn {
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn.small {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+.btn[aria-pressed='false'] {
+  color: var(--muted);
+}
+.tools {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* 완료 화면 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(31, 42, 90, 0.5);
+}
+.overlay[hidden] {
+  display: none;
+}
+.dialog {
+  width: 100%;
+  max-width: 380px;
+  padding: 24px 20px;
+  border-radius: 20px;
+  background: var(--card);
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(31, 42, 90, 0.3);
+}
+.dialog h2 {
+  margin: 0 0 6px;
+  font-size: 1.4rem;
+}
+.done-sub {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+.done-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.done-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.done-actions .btn {
+  flex: 1;
+  min-width: 120px;
+}
+.done-actions .btn[hidden] {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 700px) {
+  :root {
+    --card-h: 136px;
+    --gap: 12px;
+  }
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card.matched,
+  .card.wrong {
+    animation: none;
+    transition: none;
+  }
+}
